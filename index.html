@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OAuth Redirect URI</title>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+						background: black;
+						color: white;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        textarea {
+            width: 400px;
+            height: 300px;
+            font-family: monospace;
+            resize: none;
+						background: black;
+						color: white;
+        }
+
+        button {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <textarea id="queryParams" readonly></textarea>
+        <button id="copyButton">Copy to Clipboard</button>
+    </div>
+
+    <script>
+        const queryParams = new URLSearchParams(window.location.search)
+        let textOutput = ''
+        for (const [key,  value] of queryParams.entries()) {
+					textOutput += `${decodeURIComponent(key)}`
+						if (value) {
+							textOutput += `=${decodeURIComponent(value)}`
+						}
+
+						textOutput += '\n'
+        }
+
+        const queryParamsElement = document.getElementById('queryParams')
+        queryParamsElement.innerHTML = textOutput
+
+        const copyButton = document.getElementById('copyButton')
+        copyButton.addEventListener('click', () => {
+            queryParamsElement.select()
+            document.execCommand('copy')
+            copyButton.innerHTML = 'Copied!'
+						copyButton.setAttribute('disabled', true)
+            setTimeout(() => {
+                copyButton.innerHTML = 'Copy to Clipboard'
+								copyButton.removeAttribute('disabled')
+            }, 2000)
+        })
+    </script>
+</body>
+</html>
